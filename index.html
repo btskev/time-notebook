@@ -546,8 +546,8 @@ body{background:#0D1626}
 .row{padding-top:10px;padding-bottom:10px}
 .diary-card{border-style:solid;box-shadow:none}
 .tabbar{
-  position:fixed;left:50%;bottom:0;z-index:70;transform:translateX(-50%);
-  width:min(640px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  position:fixed;left:0;right:0;bottom:0;z-index:70;transform:none;
+  width:auto;max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
   padding:6px 8px calc(var(--safe-b) + 6px);background:color-mix(in srgb,var(--card) 94%,transparent);
   border-top:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:0 -12px 30px -28px rgba(0,0,0,.75)
 }
