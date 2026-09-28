@@ -1,5 +1,5 @@
 /* 时间笔记 · 离线缓存 */
-var CACHE = "time-notebook-v5";
+var CACHE = "time-notebook-v6";
 var ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./maskable-512.png", "./apple-touch-icon.png", "./screenshot-timeline.png", "./screenshot-stats.png"];
 
 self.addEventListener("install", function (e) {

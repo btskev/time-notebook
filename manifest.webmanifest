@@ -2,7 +2,7 @@
   "id": "time-notebook",
   "name": "时间笔记",
   "short_name": "时间笔记",
-  "description": "带实时时钟和计时记录的手机笔记本：每条笔记自动打时间戳，可一键计时、手写草图、搜索与统计。",
+  "description": "个人时间轴、图片日记、习惯打卡与每日支出的本地优先 PWA。",
   "lang": "zh-CN",
   "dir": "ltr",
   "start_url": "./index.html",
@@ -21,10 +21,12 @@
   ],
   "screenshots": [
     { "src": "screenshot-timeline.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "时间轴笔记与计时" },
-    { "src": "screenshot-stats.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "专注时长统计" }
+    { "src": "screenshot-stats.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "每日账单与月度汇总" }
   ],
   "shortcuts": [
     { "name": "开始计时", "short_name": "计时", "url": "./index.html?action=track", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
-    { "name": "快速记录", "short_name": "记录", "url": "./index.html?action=note", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+    { "name": "快速记录", "short_name": "记录", "url": "./index.html?action=note", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "记一笔支出", "short_name": "记一笔", "url": "./index.html?action=expense", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "写日记", "short_name": "日记", "url": "./index.html?action=diary", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
   ]
 }

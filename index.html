@@ -527,6 +527,123 @@ main{background-color:var(--paper);}
   body{padding:0}
   .app{border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06)}
 }
+
+/* ================= v3 · 极简账单 / 四栏导航 / 增强日记打卡 ================= */
+:root{
+  --paper:#F6F3EC;--paper-2:#EFEBE1;--card:#FFFDF8;--card-2:#F9F6EF;--line:#DDD7CA;
+  --ink:#172238;--ink-2:#3D485B;--ink-soft:#707987;--ink-faint:#A0A6AE;
+  --teal:#2F7D6C;--teal-soft:rgba(47,125,108,.10);--brass:#A9853E;--brass-soft:rgba(169,133,62,.12);
+  --signal:#B74B43;--signal-soft:rgba(183,75,67,.10);--shadow-1:0 10px 28px -24px rgba(23,34,56,.55);
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#111923;--paper-2:#17212D;--card:#1A2430;--card-2:#141D28;--line:#2A3644;
+    --ink:#EEF1F4;--ink-2:#CBD2DB;--ink-soft:#95A0AE;--ink-faint:#697482;
+    --teal:#56B7A1;--teal-soft:rgba(86,183,161,.13);--brass:#D0AD66;--brass-soft:rgba(208,173,102,.13);
+    --signal:#E06D65;--signal-soft:rgba(224,109,101,.13);--shadow-1:0 10px 28px -22px rgba(0,0,0,.9);}
+}
+body{background:#0D1626}
+.top{background:linear-gradient(165deg,#1E2D47,#162238 64%,#111A2B);box-shadow:0 12px 30px -28px #000}
+.row{padding-top:10px;padding-bottom:10px}
+.diary-card{border-style:solid;box-shadow:none}
+.tabbar{
+  position:fixed;left:50%;bottom:0;z-index:70;transform:translateX(-50%);
+  width:min(640px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  padding:6px 8px calc(var(--safe-b) + 6px);background:color-mix(in srgb,var(--card) 94%,transparent);
+  border-top:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:0 -12px 30px -28px rgba(0,0,0,.75)
+}
+.tabbar button{height:48px;border:0;border-radius:12px;background:transparent;color:var(--ink-soft);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px}
+.tabbar button b{font-size:17px;line-height:1;font-weight:500}
+.tabbar button.on{background:var(--brass-soft);color:var(--ink)}
+.tabbar button.on b{color:var(--brass)}
+.tab-page{bottom:0;padding-bottom:calc(var(--safe-b) + 68px);background:var(--paper);color:var(--ink);z-index:55}
+.tab-page .ov-head{background:var(--card);border-color:var(--line);color:var(--ink)}
+.tab-page .ov-head button{color:var(--ink-2);border-color:var(--line);background:var(--card)}
+.tab-page .ov-head button.done,.tab-page .ov-head button.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+body[data-tab="bills"] .top,body[data-tab="bills"] main,body[data-tab="bills"] .bottom,body[data-tab="bills"] .install-bar,
+body[data-tab="diary"] .top,body[data-tab="diary"] main,body[data-tab="diary"] .bottom,body[data-tab="diary"] .install-bar,
+body[data-tab="habits"] .top,body[data-tab="habits"] main,body[data-tab="habits"] .bottom,body[data-tab="habits"] .install-bar{display:none!important}
+body[data-tab="time"] .bottom{bottom:calc(var(--safe-b) + 62px);padding-bottom:9px}
+body[data-tab="time"] .dock{grid-template-columns:1fr 1fr}
+body[data-tab="time"] #btnPaper,body[data-tab="time"] #btnFull{display:none}
+body[data-tab="time"] .habit-wrap,body[data-tab="time"] .stat-strip{display:none}
+.quick-page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:16px 18px 12px;background:var(--card);border-bottom:1px solid var(--line)}
+.quick-page-head h2{margin:0;font-size:21px;font-weight:600;letter-spacing:.01em}
+.quick-page-head p{margin:5px 0 0;color:var(--ink-soft);font-size:11.5px}
+.page-scroll{flex:1;overflow-y:auto;padding:14px 14px 132px}
+.page-action{border:0;border-radius:99px;background:var(--ink);color:var(--paper);padding:9px 15px;font-size:12.5px;font-weight:600}
+.month-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
+.month-nav button{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--ink-2)}
+.month-nav b{min-width:112px;text-align:center;font-size:14px}
+.bill-summary{display:grid;grid-template-columns:1.4fr 1fr;gap:8px;margin-bottom:16px}
+.bill-summary div{padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.bill-summary span{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:5px}
+.bill-summary b{font-family:var(--mono);font-size:22px;letter-spacing:-.04em}
+.bill-summary .small b{font-size:17px}
+.bill-day{margin:0 0 14px}
+.bill-day-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 4px 7px;color:var(--ink-soft);font-size:11.5px}
+.bill-day-head b{font-size:12.5px;color:var(--ink-2)}
+.bill-list{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.bill-row{width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border:0;border-top:1px solid var(--line);background:transparent;text-align:left}
+.bill-row:first-child{border-top:0}
+.bill-row .cat{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--paper-2);font-size:17px}
+.bill-row .main{min-width:0}.bill-row .main b{display:block;font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bill-row .main small{display:block;margin-top:3px;color:var(--ink-soft);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bill-row .amount{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink)}
+.bill-empty{padding:46px 20px;text-align:center;color:var(--ink-soft);font-size:12.5px;line-height:1.8}
+.bill-sheet{position:fixed;left:50%;bottom:0;z-index:100;width:min(640px,100%);transform:translate(-50%,105%);
+  background:var(--card);border-radius:20px 20px 0 0;padding:16px 16px calc(var(--safe-b) + 16px);box-shadow:0 -24px 60px -30px #000;transition:transform .24s ease}
+.bill-sheet.show{transform:translate(-50%,0)}
+.bill-sheet h3{margin:0 0 14px;font-size:15px}
+.bill-amount{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);padding:4px 2px 10px;margin-bottom:12px}
+.bill-amount span{font-family:var(--mono);font-size:25px;color:var(--brass)}
+.bill-amount input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:var(--mono);font-size:32px;font-weight:700;color:var(--ink)}
+.bill-cats{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.bill-cats::-webkit-scrollbar{display:none}
+.bill-cats button{flex:none;height:34px;border-radius:99px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink-2);padding:0 11px;font-size:12px}
+.bill-cats button.on{background:var(--brass-soft);border-color:var(--brass);color:var(--ink)}
+.bill-fields{display:grid;grid-template-columns:1.6fr 1fr;gap:8px;margin:4px 0 14px}
+.bill-fields input{min-width:0;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink);padding:0 11px;outline:none}
+.bill-sheet-actions{display:flex;gap:8px}.bill-sheet-actions button{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:13px}
+.bill-sheet-actions .save{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.bill-sheet-actions .delete{flex:.7;color:var(--signal)}
+.bill-sheet[data-edit="1"] .delete{display:block}.bill-sheet .delete{display:none}
+.diary-tools{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+.diary-tools button{height:34px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink-2);padding:0 12px;font-size:11.5px}
+.diary-tools .spacer{flex:1}.diary-month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.diary-month-grid .wd{text-align:center;color:var(--ink-faint);font-size:10px;padding:2px}
+.diary-month-grid button{aspect-ratio:1;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink-2);font-family:var(--mono);font-size:11px;position:relative}
+.diary-month-grid button.today{border-color:var(--brass)}
+.diary-month-grid button.sel{background:var(--ink);color:var(--paper)}
+.diary-month-grid button.has::after{content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--teal)}
+.diary-month-grid button.sel.has::after{background:var(--paper)}
+.diary-prompt{display:flex;gap:7px;overflow-x:auto;padding:0 0 9px;scrollbar-width:none}.diary-prompt::-webkit-scrollbar{display:none}
+.diary-prompt button{flex:none;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink-2);padding:7px 11px;font-size:11.5px}
+.diary-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 0 8px}.diary-tags .tg{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:99px;background:var(--teal-soft);color:var(--teal);font-size:11px}
+.diary-tags input{min-width:96px;flex:1;height:30px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);outline:none}
+.diary-searchbar{display:none;gap:8px;margin-bottom:10px}.diary-searchbar.show{display:flex}
+.diary-searchbar input{flex:1;height:38px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);padding:0 12px;outline:none}
+.diary-search-results{display:none;margin-bottom:10px}.diary-search-results.show{display:block}
+.diary-search-results button{width:100%;text-align:left;border:1px solid var(--line);border-top:0;background:var(--card);padding:10px 12px;color:var(--ink-2)}
+.diary-search-results button:first-child{border-top:1px solid var(--line);border-radius:11px 11px 0 0}.diary-search-results button:last-child{border-radius:0 0 11px 11px}
+.habit-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.habit-summary div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.habit-summary span{display:block;color:var(--ink-soft);font-size:10.5px;margin-bottom:4px}.habit-summary b{font-family:var(--mono);font-size:18px}
+.habit-page-list{display:flex;flex-direction:column;gap:10px}
+.habit-card{border:1px solid var(--line);border-radius:15px;background:var(--card);padding:13px}
+.habit-card-head{display:flex;align-items:center;gap:9px}.habit-card-head .em{font-size:20px}.habit-card-head b{font-size:14px}.habit-card-head .goal{margin-left:auto;color:var(--ink-soft);font-size:11px}
+.habit-toggle{margin-left:8px;height:34px;min-width:64px;border:1px solid var(--line);border-radius:99px;background:var(--paper-2);color:var(--ink-soft);font-size:11.5px}
+.habit-toggle.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.habit-heat{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:11px}
+.habit-heat button{aspect-ratio:1;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--ink-faint);font-size:9.5px;padding:0}
+.habit-heat button.on{background:var(--teal);border-color:var(--teal);color:#fff}.habit-heat button.today{outline:2px solid var(--brass);outline-offset:1px}
+.habit-note-bar{display:flex;align-items:center;gap:8px;margin-top:9px;color:var(--ink-soft);font-size:11px}.habit-note-bar button{margin-left:auto;border:0;background:transparent;color:var(--brass);font-size:11.5px}
+.habit-detail{position:fixed;left:50%;bottom:0;z-index:100;width:min(640px,100%);transform:translate(-50%,105%);background:var(--card);border-radius:20px 20px 0 0;padding:16px 16px calc(var(--safe-b) + 16px);box-shadow:0 -24px 60px -30px #000;transition:transform .24s ease}
+.habit-detail.show{transform:translate(-50%,0)}.habit-detail textarea{width:100%;height:88px;border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink);padding:10px;resize:none;outline:none}
+.habit-detail .actions{display:flex;gap:8px;margin-top:10px}.habit-detail .actions button{flex:1;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card)}.habit-detail .actions .save{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media(min-width:641px){.tabbar{box-shadow:0 -12px 30px -28px #000}.tab-page{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+.head-actions{display:flex;gap:7px}.page-action.ghost{background:var(--card);color:var(--ink-2);border:1px solid var(--line)}
+.diary-body .day-strip{display:none}
+.diary-ov .ov-head{background:var(--card)}
 </style>
 </head>
 <body>
@@ -607,7 +724,12 @@ main{background-color:var(--paper);}
       <button id="btnMenu" type="button">更多</button>
     </div>
   </div>
-</div>
+  <nav class="tabbar" id="tabbar" aria-label="主导航">
+    <button type="button" data-tab="time" class="on"><b>◷</b><span>时间</span></button>
+    <button type="button" data-tab="bills"><b>¥</b><span>账单</span></button>
+    <button type="button" data-tab="diary"><b>▤</b><span>日记</span></button>
+    <button type="button" data-tab="habits"><b>✓</b><span>打卡</span></button>
+  </nav></div>
 
 <div class="backdrop" id="backdrop"></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="更多选项">
@@ -616,6 +738,7 @@ main{background-color:var(--paper);}
   <button class="sheet-row" id="btnHabits" type="button">管理习惯<small>改名 / 删除</small></button>
   <button class="sheet-row" id="btnDiary" type="button">日记本<small>按天写</small></button>
   <button class="sheet-row" id="btnRestore" type="button">恢复备份<small>自动快照</small></button>
+  <button class="sheet-row" id="btnPaperSheet" type="button">切换纸型<small>点阵 / 方格 / 空白</small></button>
   <button class="sheet-row" id="btnFull2" type="button">全屏显示<small>隐藏地址栏</small></button>
   <button class="sheet-row" id="btnStats" type="button">统计<small>时长 / 条数</small></button>
   <button class="sheet-row" id="btnSearch" type="button">搜索笔记<small>全部记录</small></button>
@@ -662,7 +785,7 @@ main{background-color:var(--paper);}
   </div>
 </div>
 
-<div class="overlay diary-ov" id="diaryOverlay" aria-hidden="true">
+<div class="overlay diary-ov tab-page" id="diaryOverlay" aria-hidden="true">
   <div class="ov-head">
     <span id="diaryTitle">日记本</span>
     <span class="sp">
@@ -671,6 +794,10 @@ main{background-color:var(--paper);}
     </span>
   </div>
   <div class="diary-body">
+    <div class="diary-tools"><button id="diaryMonthPrev" type="button">‹</button><b id="diaryMonthLabel"></b><button id="diaryMonthNext" type="button">›</button><span class="spacer"></span><button id="diarySearchBtn" type="button">搜索</button></div>
+    <div class="diary-searchbar" id="diarySearchBar"><input id="diarySearchInput" type="search" placeholder="搜索日记或标签…"></div>
+    <div class="diary-search-results" id="diarySearchResults"></div>
+    <div class="diary-month-grid" id="diaryMonthGrid"></div>
     <div class="day-strip" id="dayStrip"></div>
     <div class="diary-meta">
       <div class="chip-row" id="moodRow"><span class="lbl">心情</span></div>
@@ -680,9 +807,23 @@ main{background-color:var(--paper);}
       <div class="diary-photos-head"><span>当天照片</span><button id="diaryAddImage" type="button">＋ 添加照片</button></div>
       <div class="photo-strip" id="diaryPhotos" hidden></div>
     </div>
+    <div class="diary-prompt" id="diaryPrompts"></div>
+    <div class="diary-tags"><span>标签</span><span id="diaryTags"></span><input id="diaryTagInput" type="text" maxlength="12" placeholder="输入后回车"></div>
     <textarea id="diaryText" class="diary-text" placeholder="今天发生了什么？随便写，只有你自己看得到。"></textarea>
     <div class="diary-foot"><span id="diaryCount">0 字</span><span class="right" id="diarySaved"></span></div>
   </div>
+</div>
+<div class="overlay tab-page" id="billsOverlay" aria-hidden="true">
+  <div class="quick-page-head"><div><h2>每日账单</h2><p id="billHeadSummary">本月 ¥0.00 · 0 笔</p></div><div class="head-actions"><button class="page-action ghost" id="billCatBtn" type="button">分类</button><button class="page-action" id="billAddBtn" type="button">＋ 记一笔</button></div></div>
+  <div class="page-scroll">
+    <div class="month-nav"><button id="billPrevMonth" type="button" aria-label="上个月">‹</button><b id="billMonthLabel"></b><button id="billNextMonth" type="button" aria-label="下个月">›</button></div>
+    <div class="bill-summary"><div><span>本月支出</span><b id="billMonthTotal">¥0.00</b></div><div class="small"><span>记录</span><b id="billMonthCount">0 笔</b></div></div>
+    <div id="billList"></div>
+  </div>
+</div>
+<div class="overlay tab-page" id="habitsOverlay" aria-hidden="true">
+  <div class="quick-page-head"><div><h2>每日打卡</h2><p id="habitHeadSummary">今天 0/0 · 连续 0 天</p></div><button class="page-action" id="habitPageAdd" type="button">＋ 新习惯</button></div>
+  <div class="page-scroll"><div class="habit-summary"><div><span>今日完成</span><b id="habitPageDone">0/0</b></div><div><span>连续打卡</span><b id="habitPageStreak">0天</b></div><div><span>本周进度</span><b id="habitPageWeek">0%</b></div></div><div class="habit-page-list" id="habitPageList"></div></div>
 </div>
 <div class="lightbox" id="lightbox">
   <img id="lightboxImg" alt="草图">
@@ -693,6 +834,18 @@ main{background-color:var(--paper);}
 </div>
 <input type="file" id="fileInput" accept=".json,application/json" hidden>
 <input type="file" id="imageInput" accept="image/*" multiple hidden>
+<div class="bill-sheet" id="billSheet" data-edit="0" aria-hidden="true">
+  <h3 id="billSheetTitle">记一笔支出</h3>
+  <div class="bill-amount"><span>¥</span><input id="billAmount" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-label="金额"></div>
+  <div class="bill-cats" id="billCats"></div>
+  <div class="bill-fields"><input id="billNote" type="text" maxlength="60" placeholder="备注（可选）" aria-label="备注"><input id="billDate" type="date" aria-label="日期"></div>
+  <div class="bill-sheet-actions"><button class="delete" id="billDelete" type="button">删除</button><button id="billCancel" type="button">取消</button><button class="save" id="billSave" type="button">保存</button></div>
+</div>
+<div class="habit-detail" id="habitDetail" aria-hidden="true">
+  <h3 id="habitDetailTitle">打卡备注</h3>
+  <textarea id="habitNoteText" maxlength="200" placeholder="写点补充，例如：今天读完了第 3 章"></textarea>
+  <div class="actions"><button id="habitNoteCancel" type="button">取消</button><button class="save" id="habitNoteSave" type="button">保存备注</button></div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button class="act" id="toastAct" type="button" hidden></button></div>
 <style>.dock .primary .dot[hidden]{display:none}</style>
 <script>
@@ -837,7 +990,7 @@ main{background-color:var(--paper);}
   /* ---------- state ---------- */
   function fresh(){
     return {
-      version:1, paper:"dot", entries:[], tracking:null, diary:{}, checkins:{},
+      version:3, paper:"dot", entries:[], tracking:null, diary:{}, checkins:{}, bills:[], billCategories:defaultBillCategories(),
       habits:[
         {id:"h_read", name:"读书", emoji:"📖", createdAt:0},
         {id:"h_sleep", name:"早睡", emoji:"🌙", createdAt:0},
@@ -845,6 +998,42 @@ main{background-color:var(--paper);}
       ],
       habitLog:{}
     };
+  }
+  var DEFAULT_BILL_CATEGORIES=[
+    {id:"c_food",name:"餐饮",emoji:"🍜",order:0},{id:"c_transport",name:"交通",emoji:"🚌",order:1},
+    {id:"c_shopping",name:"购物",emoji:"🛍️",order:2},{id:"c_daily",name:"日用",emoji:"🧻",order:3},
+    {id:"c_fun",name:"娱乐",emoji:"🎬",order:4},{id:"c_health",name:"医疗",emoji:"💊",order:5},
+    {id:"c_home",name:"住房",emoji:"🏠",order:6},{id:"c_other",name:"其他",emoji:"•",order:7}
+  ];
+  function defaultBillCategories(){ return DEFAULT_BILL_CATEGORIES.map(function(x){ return JSON.parse(JSON.stringify(x)); }); }
+  function sanitizeBillCategories(list){
+    if(!Array.isArray(list)) return defaultBillCategories();
+    var out=[],seen={},i;
+    for(i=0;i<list.length && out.length<30;i++){
+      var c=list[i]; if(!c||typeof c!=="object") continue;
+      var id=String(c.id||"").slice(0,40), name=String(c.name||"").trim().slice(0,12);
+      if(!id||!name||seen[id]) continue;
+      seen[id]=1; out.push({id:id,name:name,emoji:String(c.emoji||"•").slice(0,4),order:num(c.order,out.length)});
+    }
+    if(!seen.c_other){ out.push({id:"c_other",name:"其他",emoji:"•",order:out.length}); }
+    return out.sort(function(a,b){return num(a.order,0)-num(b.order,0);});
+  }
+  function sanitizeBills(list,cats){
+    if(!Array.isArray(list)) return [];
+    var ok={},out=[],i;(cats||[]).forEach(function(c){ok[c.id]=1;});
+    for(i=0;i<list.length && out.length<30000;i++){
+      var b=list[i]; if(!b||typeof b!=="object") continue;
+      var id=String(b.id||"").slice(0,64), amt=Math.round(num(b.amountCents,0));
+      var day=String(b.date||"").slice(0,10); if(!/^\d{4}-\d{2}-\d{2}$/.test(day)) continue;
+      if(!id||!isFinite(amt)||amt<=0||amt>100000000000) continue;
+      var cid=String(b.categoryId||"c_other").slice(0,40); if(!ok[cid]) cid="c_other";
+      out.push({id:id,amountCents:amt,categoryId:cid,note:String(b.note||"").slice(0,60),date:day,ts:num(b.ts,Date.now()),updatedAt:num(b.updatedAt,0)});
+    }
+    return out;
+  }
+  function sanitizeHabitNotes(d){
+    if(!d||typeof d!=="object") return {};
+    var out={},n=0;Object.keys(d).forEach(function(k){if(n>=30000)return;if(!/^[\w-]{1,40}\|\d{4}-\d{2}-\d{2}$/.test(k))return;var v=String(d[k]||"").trim().slice(0,200);if(v){out[k]=v;n++;}});return out;
   }
   /* 习惯列表与习惯打卡日志 */
   function sanitizeHabits(list){
@@ -856,7 +1045,8 @@ main{background-color:var(--paper);}
       var id=String(hb.id==null?"":hb.id).slice(0,40);
       var name=String(hb.name==null?"":hb.name).trim().slice(0,12);
       if(!id || !name) continue;
-      out.push({id:id, name:name, emoji:String(hb.emoji==null?"":hb.emoji).slice(0,4), createdAt:num(hb.createdAt,0)});
+      var goalType=(hb.goalType==="weekly")?"weekly":"daily";
+      out.push({id:id, name:name, emoji:String(hb.emoji==null?"":hb.emoji).slice(0,4), goalType:goalType, weeklyTarget:Math.min(7,Math.max(1,Math.round(num(hb.weeklyTarget,3)))), createdAt:num(hb.createdAt,0)});
     }
     return out;
   }
@@ -896,8 +1086,10 @@ main{background-color:var(--paper);}
       var mood=(typeof e.mood==="string")?e.mood.slice(0,8):"";
       var weather=(typeof e.weather==="string")?e.weather.slice(0,8):"";
       var images=normImages(e.images);
-      if(!t.trim() && !mood && !weather && !images.length) return;
-      out[k]={t:t, mood:mood, weather:weather, images:images, ts:num(e.ts,0), updatedAt:num(e.updatedAt,0)};
+      var tags=Array.isArray(e.tags)?e.tags.map(function(x){return String(x||"").trim().slice(0,12);}).filter(Boolean).slice(0,6):[];
+      var promptId=String(e.promptId||"").slice(0,24);
+      if(!t.trim() && !mood && !weather && !images.length && !tags.length) return;
+      out[k]={t:t, mood:mood, weather:weather, images:images, tags:tags, promptId:promptId, ts:num(e.ts,0), updatedAt:num(e.updatedAt,0)};
       n++;
     });
     return out;
@@ -910,8 +1102,9 @@ main{background-color:var(--paper);}
       var en=normEntry(d.entries[i]);
       if(en) list.push(en);
     }
+    var cats=sanitizeBillCategories(d.billCategories);
     var out={
-      version:1,
+      version:3,
       paper:(d.paper==="grid"||d.paper==="blank")?d.paper:"dot",
       entries:list,
       tracking:null,
@@ -919,6 +1112,9 @@ main{background-color:var(--paper);}
       checkins:sanitizeCheckins(d.checkins),
       habits:sanitizeHabits(d.habits),
       habitLog:sanitizeHabitLog(d.habitLog),
+      habitNotes:sanitizeHabitNotes(d.habitNotes),
+      bills:sanitizeBills(d.bills,cats),
+      billCategories:cats,
       updatedAt:num(d.updatedAt,0)
     };
     if(d.tracking){
@@ -1100,6 +1296,7 @@ main{background-color:var(--paper);}
     els.list.innerHTML=html;
     hydrateThumbs();
     updateHeaderStats();
+    if(typeof renderV3Views==="function") renderV3Views();
     lastDayKey=dayKey(Date.now());
   }
 
@@ -1466,9 +1663,10 @@ main{background-color:var(--paper);}
     state.entries.forEach(addMedia);
     Object.keys(state.diary||{}).forEach(function(k){ addMedia(state.diary[k]); });
     function finish(files){
-      var payload={app:"time-notebook",version:2,exportedAt:Date.now(),paper:state.paper,
+      var payload={app:"time-notebook",version:3,exportedAt:Date.now(),paper:state.paper,
         entries:state.entries,diary:state.diary||{},checkins:state.checkins||{},
-        habits:state.habits||[],habitLog:state.habitLog||{},files:files};
+        habits:state.habits||[],habitLog:state.habitLog||{},habitNotes:state.habitNotes||{},
+        bills:state.bills||[],billCategories:state.billCategories||defaultBillCategories(),files:files};
       var blob=new Blob([JSON.stringify(payload)],{type:"application/json"});
       var url=URL.createObjectURL(blob);
       var d=new Date();
@@ -1494,7 +1692,7 @@ main{background-color:var(--paper);}
   function importData(data){
     if(Array.isArray(data)) data={version:1, paper:"dot", entries:data};
     if(!data || typeof data!=="object") throw new Error("format");
-    if(!Array.isArray(data.entries) && !(data.diary && typeof data.diary==="object")) throw new Error("format");
+    if(!Array.isArray(data.entries) && !(data.diary && typeof data.diary==="object") && !Array.isArray(data.bills)) throw new Error("format");
     if(!Array.isArray(data.entries)) data.entries=[];
     var clean=sanitize(data);
     if(!clean) throw new Error("format");
@@ -1504,6 +1702,9 @@ main{background-color:var(--paper);}
     /* 导入的文件若不含习惯配置，则保留当前习惯设置（只覆盖记录，不抹掉习惯） */
     if(!data.habits) clean.habits=state.habits||[];
     if(!data.habitLog) clean.habitLog=state.habitLog||{};
+    if(!data.habitNotes) clean.habitNotes=state.habitNotes||{};
+    if(!data.bills) clean.bills=state.bills||[];
+    if(!data.billCategories) clean.billCategories=state.billCategories||defaultBillCategories();
     if(Array.isArray(data.files)){
       data.files.slice(0,500).forEach(function(fl){
         if(!fl || typeof fl!=="object") return;
@@ -1617,9 +1818,10 @@ main{background-color:var(--paper);}
     var chip=e.target.closest?e.target.closest("[data-habit]"):null;
     if(chip){ e.preventDefault(); toggleHabit(chip.getAttribute("data-habit")); }
   });
-  $("btnHabits").addEventListener("click",function(){ closeSheet(); manageHabits(); });
-  $("btnDiary").addEventListener("click",function(){ closeSheet(); openDiary(); });
-  $("btnDiaryTop").addEventListener("click",function(){ openDiary(); });
+  $("btnHabits").addEventListener("click",function(){ closeSheet(); switchTab("habits"); });
+  $("btnDiary").addEventListener("click",function(){ closeSheet(); switchTab("diary"); });
+  $("btnDiaryTop").addEventListener("click",function(){ switchTab("diary"); });
+  $("btnPaperSheet").addEventListener("click",function(){ closeSheet(); cyclePaper(); });
   $("diaryClose").addEventListener("click",closeDiary);
   $("diaryToday").addEventListener("click",function(){ commitDiary(); diaryDay=dayKey(Date.now()); renderDiary(); });
   $("diaryText").addEventListener("input",function(){ updateDiaryCount(); $("diarySaved").textContent="保存中…"; scheduleDiarySave(); });
@@ -1908,9 +2110,10 @@ $("btnInstall").addEventListener("click",function(){
       diary[k]=x;
     });
     return {
-      version:2, app:"time-notebook-sync", exportedAt:Date.now(),
+      version:3, app:"time-notebook-sync", exportedAt:Date.now(),
       paper:state.paper, entries:entries, diary:diary,
-      checkins:state.checkins||{}, habits:state.habits||[], habitLog:state.habitLog||{}
+      checkins:state.checkins||{}, habits:state.habits||[], habitLog:state.habitLog||{},
+      habitNotes:state.habitNotes||{}, bills:state.bills||[], billCategories:state.billCategories||defaultBillCategories()
     };
   }
   function mergeIncoming(data){
@@ -1919,6 +2122,9 @@ $("btnInstall").addEventListener("click",function(){
     if(!state.checkins) state.checkins={};
     if(!state.habits) state.habits=[];
     if(!state.habitLog) state.habitLog={};
+    if(!state.habitNotes) state.habitNotes={};
+    if(!state.bills) state.bills=[];
+    if(!state.billCategories) state.billCategories=defaultBillCategories();
     var byId={}, added=0, updated=0;
     state.entries.forEach(function(e){ byId[e.id]=e; });
     (data.entries||[]).forEach(function(e){
@@ -1940,9 +2146,11 @@ $("btnInstall").addEventListener("click",function(){
         mood:String(e.mood==null?"":e.mood).slice(0,8),
         weather:String(e.weather==null?"":e.weather).slice(0,8),
         images:normImages(e.images),
+        tags:Array.isArray(e.tags)?e.tags.map(function(x){return String(x||"").trim().slice(0,12);}).filter(Boolean).slice(0,6):[],
+        promptId:String(e.promptId||"").slice(0,24),
         ts:num(e.ts,0), updatedAt:num(e.updatedAt,0)
       };
-      if(!rec.t.trim() && !rec.mood && !rec.weather && !rec.images.length) return;
+      if(!rec.t.trim() && !rec.mood && !rec.weather && !rec.images.length && !rec.tags.length) return;
       var cur=state.diary[k];
       if(!rec.images.length && cur && cur.images) rec.images=cur.images;
       if(!cur || (rec.updatedAt||0)>(cur.updatedAt||0)){ state.diary[k]=rec; updated++; }
@@ -1958,6 +2166,17 @@ $("btnInstall").addEventListener("click",function(){
     });
     Object.keys(data.checkins||{}).forEach(function(k){
       if(!state.checkins[k] && /^\d{4}-\d{2}-\d{2}$/.test(k)) state.checkins[k]=num(data.checkins[k],Date.now());
+    });
+    Object.keys(data.habitNotes||{}).forEach(function(k){
+      if(/^[\w-]{1,40}\|\d{4}-\d{2}-\d{2}$/.test(k) && !state.habitNotes[k]) state.habitNotes[k]=String(data.habitNotes[k]||"").slice(0,200);
+    });
+    var cmap={}; state.billCategories.forEach(function(c){cmap[c.id]=1;});
+    sanitizeBillCategories(data.billCategories).forEach(function(c){ if(!cmap[c.id]){state.billCategories.push(c);cmap[c.id]=1;} });
+    var bmap={}; state.bills.forEach(function(b){bmap[b.id]=b;});
+    sanitizeBills(data.bills,state.billCategories).forEach(function(b){
+      var cur=bmap[b.id];
+      if(!cur){state.bills.push(b);bmap[b.id]=b;added++;}
+      else if((b.updatedAt||b.ts||0)>(cur.updatedAt||cur.ts||0)){Object.keys(b).forEach(function(k){cur[k]=b[k];});updated++;}
     });
     save();
     return {added:added, updated:updated};
@@ -2008,11 +2227,28 @@ $("btnInstall").addEventListener("click",function(){
     var k=habitKey(hid, day||dayKey(Date.now()));
     return !!(state.habitLog && state.habitLog[k]);
   }
-  function habitStreak(hid){
-    var d=new Date(), n=0, guard=0;
-    if(!habitDone(hid, dayKey(d.getTime()))) d.setDate(d.getDate()-1);
-    while(habitDone(hid, dayKey(d.getTime())) && guard<3650){ n++; guard++; d.setDate(d.getDate()-1); }
+  function habitWeekStart(d){
+    var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()),wd=(x.getDay()+6)%7;
+    x.setDate(x.getDate()-wd); return x;
+  }
+  function habitWeekCount(hid,base){
+    var start=habitWeekStart(base||new Date()),n=0,guard=0,d=new Date(start);
+    while(guard<7){ if(habitDone(hid,dayKey(d.getTime()))) n++; d.setDate(d.getDate()+1); guard++; }
     return n;
+  }
+  function habitStreak(hid){
+    var hb=habitById(hid); if(!hb) return 0;
+    if(hb.goalType==="weekly"){
+      var target=Math.min(7,Math.max(1,Math.round(num(hb.weeklyTarget,3))));
+      var d=habitWeekStart(new Date()), n=0, guard=0;
+      if(habitWeekCount(hid,d)<target) d.setDate(d.getDate()-7);
+      while(habitWeekCount(hid,d)>=target && guard<520){ n++; guard++; d.setDate(d.getDate()-7); }
+      return n;
+    }
+    var x=new Date(), n2=0, guard2=0;
+    if(!habitDone(hid, dayKey(x.getTime()))) x.setDate(x.getDate()-1);
+    while(habitDone(hid, dayKey(x.getTime())) && guard2<3650){ n2++; guard2++; x.setDate(x.getDate()-1); }
+    return n2;
   }
   function checkinStreak(){
     if(!state.checkins) return 0;
@@ -2027,20 +2263,23 @@ $("btnInstall").addEventListener("click",function(){
     if(!state.checkins) state.checkins={};
     if(any){ state.checkins[day]=Date.now(); } else { delete state.checkins[day]; }
   }
-  function toggleHabit(hid){
+  function toggleHabit(hid,day,backfill){
     var hb=habitById(hid);
     if(!hb) return;
-    var day=dayKey(Date.now()), k=habitKey(hid,day);
+    day=day||dayKey(Date.now());
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(day) || day>dayKey(Date.now())){ toast("不能给未来日期打卡"); return; }
+    var k=habitKey(hid,day);
     if(!state.habitLog) state.habitLog={};
+    if(!state.habitNotes) state.habitNotes={};
     if(state.habitLog[k]){
-      delete state.habitLog[k];
+      delete state.habitLog[k]; delete state.habitNotes[k];
       save(); syncDayCheckin(day); updateCheckinUI(); render();
-      toast("已取消："+hb.name);
+      toast(backfill?("已取消补签："+hb.name):("已取消："+hb.name));
     }else{
       state.habitLog[k]=Date.now();
       save(); syncDayCheckin(day); updateCheckinUI(); render();
-      var n=habitStreak(hid);
-      toast(hb.name+" 打卡成功"+(n>1?(" · 连续 "+n+" 天"):""), "取消", function(){ toggleHabit(hid); });
+      var n=habitStreak(hid), unit=(hb.goalType==="weekly"?" 周":" 天");
+      toast(hb.name+(backfill?" 补签成功":" 打卡成功")+(n>1?(" · 连续 "+n+unit):""), "取消", function(){ toggleHabit(hid,day,backfill); });
     }
   }
   function addHabit(){
@@ -2050,9 +2289,14 @@ $("btnInstall").addEventListener("click",function(){
     if(!name){ toast("名字不能为空"); return; }
     var emo=prompt("给它配个表情（可留空）","✨");
     var emoji=(emo===null?"":String(emo).trim().slice(0,4)) || "✨";
+    var gt=prompt("目标类型：1 每天，2 每周次数","1");
+    if(gt===null) return;
+    var weekly=(String(gt).trim()==="2");
+    var target=3;
+    if(weekly){ var tv=prompt("每周目标次数（1-7）","3"); if(tv===null) return; target=Math.min(7,Math.max(1,Math.round(num(tv,3)))); }
     if(!state.habits) state.habits=[];
     if(state.habits.length>=20){ toast("最多 20 个习惯"); return; }
-    state.habits.push({id:"h"+Date.now().toString(36)+Math.random().toString(36).slice(2,5), name:name, emoji:emoji, createdAt:Date.now()});
+    state.habits.push({id:"h"+Date.now().toString(36)+Math.random().toString(36).slice(2,5), name:name, emoji:emoji, goalType:weekly?"weekly":"daily", weeklyTarget:target, createdAt:Date.now()});
     save(); updateCheckinUI(); render();
     toast("已添加习惯："+name);
   }
@@ -2066,6 +2310,14 @@ $("btnInstall").addEventListener("click",function(){
     var emo=prompt("表情",hb.emoji||"✨");
     hb.name=name;
     if(emo!==null) hb.emoji=String(emo).trim().slice(0,4)||"✨";
+    var gt=prompt("目标类型：1 每天，2 每周次数",hb.goalType==="weekly"?"2":"1");
+    if(gt!==null){
+      hb.goalType=(String(gt).trim()==="2")?"weekly":"daily";
+      if(hb.goalType==="weekly"){
+        var tv=prompt("每周目标次数（1-7）",String(hb.weeklyTarget||3));
+        if(tv!==null) hb.weeklyTarget=Math.min(7,Math.max(1,Math.round(num(tv,3))));
+      }
+    }
     save(); updateCheckinUI(); render();
     toast("已更新");
   }
@@ -2124,6 +2376,7 @@ $("btnInstall").addEventListener("click",function(){
     var bs=$("statStreak"); if(bs) bs.textContent=String(checkinStreak());
     var bh=$("statHabits"); if(bh) bh.textContent=done+"/"+total;
     renderHabitChips();
+    if(typeof renderHabitsV3==="function") renderHabitsV3();
   }
   function checkinGridHtml(){
     var now=new Date(), y=now.getFullYear(), m=now.getMonth();
@@ -2186,7 +2439,7 @@ $("btnInstall").addEventListener("click",function(){
       var r2=diaryOf(k);
       var btn=document.createElement("button");
       btn.type="button";
-      btn.className="day-chip"+(k===day?" on":"")+((r2 && (String(r2.t||"").trim() || (r2.images&&r2.images.length)))?" has":"");
+      btn.className="day-chip"+(k===day?" on":"")+((r2 && (String(r2.t||"").trim() || (r2.images&&r2.images.length) || (r2.tags&&r2.tags.length)))?" has":"");
       btn.innerHTML="<b>"+(d2.getMonth()+1)+"/"+d2.getDate()+"</b>"+WEEK[d2.getDay()].slice(1);
       btn.addEventListener("click",function(){ commitDiary(); diaryDay=k; renderDiary(); });
       strip.appendChild(btn);
@@ -2216,11 +2469,13 @@ $("btnInstall").addEventListener("click",function(){
     $("diaryText").value=String(rec.t||"");
     updateDiaryCount();
     $("diarySaved").textContent=rec.updatedAt? ("已保存 "+fmtHM(new Date(rec.updatedAt))) : "";
+    if(typeof renderDiaryV3==="function") renderDiaryV3(rec,day);
   }
   function ensureDiaryRec(day){
     if(!state.diary) state.diary={};
-    if(!state.diary[day]) state.diary[day]={t:"",mood:"",weather:"",images:[],ts:Date.now(),updatedAt:0};
+    if(!state.diary[day]) state.diary[day]={t:"",mood:"",weather:"",images:[],tags:[],promptId:"",ts:Date.now(),updatedAt:0};
     if(!state.diary[day].images) state.diary[day].images=[];
+    if(!state.diary[day].tags) state.diary[day].tags=[];
     return state.diary[day];
   }
   function setDiaryField(k,v){
@@ -2229,7 +2484,7 @@ $("btnInstall").addEventListener("click",function(){
     rec[k]=v;
     rec.updatedAt=Date.now();
     if(!rec.ts) rec.ts=Date.now();
-    if(!String(rec.t||"").trim() && !rec.mood && !rec.weather && !(rec.images&&rec.images.length)){ delete state.diary[diaryDay]; }
+    if(!String(rec.t||"").trim() && !rec.mood && !rec.weather && !(rec.images&&rec.images.length) && !(rec.tags&&rec.tags.length)){ delete state.diary[diaryDay]; }
     save(); renderDiary();
   }
   function commitDiary(){
@@ -2244,7 +2499,7 @@ $("btnInstall").addEventListener("click",function(){
     rec.t=t;
     rec.updatedAt=Date.now();
     if(!rec.ts) rec.ts=Date.now();
-    if(!t.trim() && !rec.mood && !rec.weather && !(rec.images&&rec.images.length)){ delete state.diary[diaryDay]; }
+    if(!t.trim() && !rec.mood && !rec.weather && !(rec.images&&rec.images.length) && !(rec.tags&&rec.tags.length)){ delete state.diary[diaryDay]; }
     if(changed){ save(); }
     $("diarySaved").textContent="已保存 "+fmtHM(new Date(rec.updatedAt));
     updateDiaryCount();
@@ -2279,12 +2534,15 @@ $("btnInstall").addEventListener("click",function(){
   }
   function openDiary(day){
     diaryDay=day||dayKey(Date.now());
+    if(typeof diaryMonthV3!=="undefined" && diaryMonthV3) diaryMonthV3=new Date(diaryDay+"T00:00:00");
+    if(typeof switchTab==="function"){ switchTab("diary"); return; }
     renderDiary();
     $("diaryOverlay").classList.add("show");
     $("diaryOverlay").setAttribute("aria-hidden","false");
   }
   function closeDiary(){
     commitDiary();
+    if(typeof switchTab==="function"){ switchTab("time"); return; }
     $("diaryOverlay").classList.remove("show");
     $("diaryOverlay").setAttribute("aria-hidden","true");
     render();
@@ -2294,9 +2552,9 @@ $("btnInstall").addEventListener("click",function(){
     var mood=(rec&&rec.mood)?('<span class="em">'+esc(rec.mood)+'</span>'):"";
     var wea=(rec&&rec.weather)?('<span class="em">'+esc(rec.weather)+'</span>'):"";
     var t=rec?String(rec.t||""):"";
-    var imgs=rec&&rec.images?rec.images.length:0;
-    if(t.trim() || imgs){
-      var pre=t.trim()? t.slice(0,60).replace(/\n/g," ") : ("今天有 "+imgs+" 张照片");
+    var imgs=rec&&rec.images?rec.images.length:0, tags=rec&&rec.tags?rec.tags.length:0;
+    if(t.trim() || imgs || tags){
+      var pre=t.trim()? t.slice(0,60).replace(/\n/g," ") : (imgs?("今天有 "+imgs+" 张照片"):("标签："+(rec.tags||[]).join("、")));
       return '<button class="diary-card" type="button" data-diary="'+day+'"><b>'+mood+wea+'今天的日记</b>'
         + '<span class="pre">'+esc(pre)+'</span></button>';
     }
@@ -2344,6 +2602,7 @@ $("btnInstall").addEventListener("click",function(){
     var dk=Object.keys(state.diary||{}).filter(function(k){ var r=state.diary[k]||{}; return String(r.t||"").trim() || (r.images&&r.images.length); });
     var thisMonth=dk.filter(function(k){ return k.slice(0,7)===dayKey(Date.now()).slice(0,7); }).length;
     html+='<div class="stats-empty">📖 日记：本月 '+thisMonth+' 篇 · 累计 '+dk.length+' 篇</div>';
+    html+='<div class="stats-empty">¥ 账单：本月 '+fmtMoney((state.bills||[]).filter(function(b){return b.date.slice(0,7)===dayKey(Date.now()).slice(0,7);}).reduce(function(s,b){return s+b.amountCents;},0))+' · '+(state.bills||[]).filter(function(b){return b.date.slice(0,7)===dayKey(Date.now()).slice(0,7);}).length+' 笔</div>';
     html+=habitsStatsHtml();
     html+=checkinGridHtml();
     html+='<div class="stat-list">';
@@ -2653,6 +2912,195 @@ $("btnInstall").addEventListener("click",function(){
     document.body.classList.toggle("scrolled", y>40);
   },{passive:true});
   })();
+
+  /* ---------- v3 · 共用导航与每日账单 ---------- */
+  var activeTab="time", billMonth=new Date(), billEditId="", billCatId="c_other";
+  function fmtMoney(cents){ return "¥"+((Math.max(0,Math.round(num(cents,0)))/100).toFixed(2)); }
+  function billById(id){ var L=state.bills||[]; for(var i=0;i<L.length;i++){ if(L[i].id===id) return L[i]; } return null; }
+  function billCatById(id){ var L=state.billCategories||[]; for(var i=0;i<L.length;i++){ if(L[i].id===id) return L[i]; } return L[0]||{id:"c_other",name:"其他",emoji:"•"}; }
+  function billMonthKey(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1); }
+  function billDayLabel(day){
+    var today=dayKey(Date.now()), y=new Date(); y.setDate(y.getDate()-1);
+    if(day===today) return "今天";
+    if(day===dayKey(y.getTime())) return "昨天";
+    var d=new Date(day+"T00:00:00"); return (d.getMonth()+1)+"月"+d.getDate()+"日 "+WEEK[d.getDay()];
+  }
+  function parseBillAmount(v){
+    var s=String(v||"").trim().replace(/[，,]/g,".");
+    if(!/^\d+(\.\d{0,2})?$/.test(s)) return 0;
+    var cents=Math.round(Number(s)*100);
+    return isFinite(cents)&&cents>0&&cents<=100000000000?cents:0;
+  }
+  function renderBills(){
+    if(!$("billList")) return;
+    var mk=billMonthKey(billMonth), rows=(state.bills||[]).filter(function(b){ return b.date.slice(0,7)===mk; });
+    rows.sort(function(a,b){ return a.date===b.date ? (b.ts||0)-(a.ts||0) : (a.date<b.date?1:-1); });
+    var total=rows.reduce(function(s,b){return s+b.amountCents;},0);
+    $("billMonthLabel").textContent=billMonth.getFullYear()+"年"+(billMonth.getMonth()+1)+"月";
+    $("billMonthTotal").textContent=fmtMoney(total);
+    $("billMonthCount").textContent=rows.length+" 笔";
+    $("billHeadSummary").textContent="本月 "+fmtMoney(total)+" · "+rows.length+" 笔";
+    if(!rows.length){ $("billList").innerHTML='<div class="bill-empty">这个月还没有支出<br>点右上角「＋ 记一笔」开始</div>'; return; }
+    var html="",cur="",open=false;
+    rows.forEach(function(b){
+      if(b.date!==cur){
+        if(open) html+='</div></div>';
+        cur=b.date; open=true;
+        var dayTotal=rows.filter(function(x){return x.date===cur;}).reduce(function(s,x){return s+x.amountCents;},0);
+        html+='<div class="bill-day"><div class="bill-day-head"><b>'+esc(billDayLabel(cur))+'</b><span>'+fmtMoney(dayTotal)+'</span></div><div class="bill-list">';
+      }
+      var c=billCatById(b.categoryId);
+      html+='<button class="bill-row" type="button" data-bill="'+esc(b.id)+'"><span class="cat">'+esc(c.emoji||"•")+'</span><span class="main"><b>'+esc(c.name)+'</b><small>'+esc(b.note||fmtHM(new Date(b.ts)))+'</small></span><span class="amount">'+fmtMoney(b.amountCents)+'</span></button>';
+    });
+    if(open) html+='</div></div>';
+    $("billList").innerHTML=html;
+  }
+  function renderBillCats(){
+    var box=$("billCats"); if(!box) return;
+    box.innerHTML=(state.billCategories||[]).map(function(c){ return '<button type="button" data-billcat="'+esc(c.id)+'" class="'+(c.id===billCatId?"on":"")+'">'+esc(c.emoji||"•")+" "+esc(c.name)+'</button>'; }).join("");
+  }
+  function openBillSheet(id){
+    billEditId=id||""; var b=id?billById(id):null;
+    billCatId=b?b.categoryId:"c_other";
+    $("billSheetTitle").textContent=b?"修改支出":"记一笔支出";
+    $("billAmount").value=b?(b.amountCents/100).toFixed(2):"";
+    $("billNote").value=b?b.note:"";
+    $("billDate").value=b?b.date:dayKey(Date.now()); $("billDate").max=dayKey(Date.now());
+    $("billSheet").dataset.edit=b?"1":"0"; renderBillCats();
+    $("billSheet").classList.add("show"); $("billSheet").setAttribute("aria-hidden","false");
+    setTimeout(function(){ $("billAmount").focus(); },80);
+  }
+  function closeBillSheet(){ $("billSheet").classList.remove("show"); $("billSheet").setAttribute("aria-hidden","true"); billEditId=""; }
+  function saveBill(){
+    var amount=parseBillAmount($("billAmount").value), date=$("billDate").value;
+    if(!amount){ toast("请输入正确金额，最多两位小数"); $("billAmount").focus(); return; }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>dayKey(Date.now())){ toast("请选择不晚于今天的日期"); return; }
+    var now=Date.now();
+    if(billEditId){
+      var b=billById(billEditId); if(!b) return;
+      b.amountCents=amount; b.categoryId=billCatId; b.note=String($("billNote").value||"").trim().slice(0,60); b.date=date; b.updatedAt=now;
+    }else{
+      state.bills.push({id:"b"+now.toString(36)+Math.random().toString(36).slice(2,5),amountCents:amount,categoryId:billCatId,note:String($("billNote").value||"").trim().slice(0,60),date:date,ts:now,updatedAt:now});
+    }
+    save(); closeBillSheet(); renderBills(); render(); toast("已保存 "+fmtMoney(amount));
+  }
+  function deleteBill(){
+    var b=billById(billEditId); if(!b) return;
+    if(!confirm("删除这笔支出？")) return;
+    state.bills=(state.bills||[]).filter(function(x){return x.id!==b.id;}); save(); closeBillSheet(); renderBills(); render();
+    toast("支出已删除","撤销",function(){ state.bills.push(b); save(); renderBills(); render(); });
+  }
+  function manageBillCategories(){
+    var lines=(state.billCategories||[]).map(function(c,i){return (i+1)+") "+c.emoji+" "+c.name;});
+    var ans=prompt("分类管理：输入编号修改/删除，输入 a 新增分类\n\n"+lines.join("\n"),"a");
+    if(ans===null) return;
+    if(String(ans).trim().toLowerCase()==="a"){
+      var name=prompt("新分类名称",""); if(name===null) return; name=String(name).trim().slice(0,12); if(!name) return;
+      var emoji=prompt("分类表情（可留空）","•"); if(emoji===null) return;
+      state.billCategories.push({id:"c"+Date.now().toString(36),name:name,emoji:String(emoji).trim().slice(0,4)||"•",order:state.billCategories.length});
+      save(); renderBills(); toast("已添加分类"); return;
+    }
+    var idx=parseInt(ans,10)-1; if(!(idx>=0&&idx<state.billCategories.length)) return;
+    var c=state.billCategories[idx],act=prompt("对「"+c.name+"」做什么？1 改名 2 删除","1"); if(act===null) return;
+    if(String(act).trim()==="2"){
+      if(c.id==="c_other"){ toast("“其他”不能删除"); return; }
+      if(!confirm("删除分类「"+c.name+"」？已有账单会移到“其他”。")) return;
+      state.bills.forEach(function(b){if(b.categoryId===c.id)b.categoryId="c_other";});
+      state.billCategories=state.billCategories.filter(function(x){return x.id!==c.id;});
+    }else{
+      var nn=prompt("新名称",c.name); if(nn===null) return; nn=String(nn).trim().slice(0,12); if(!nn) return;
+      var ee=prompt("分类表情",c.emoji||"•"); if(ee!==null)c.emoji=String(ee).trim().slice(0,4)||"•"; c.name=nn;
+    }
+    save(); renderBills(); toast("分类已更新");
+  }
+
+  /* ---------- v3 · 日记增强、打卡页与页签切换 ---------- */
+  var diaryMonthV3=new Date(), diarySearchMode=false, habitNoteKey="";
+  var DIARY_PROMPTS=[
+    {id:"happy",label:"最开心的事",text:"今天最开心的事："},
+    {id:"grateful",label:"值得感激",text:"今天值得感激的是："},
+    {id:"learned",label:"今天的收获",text:"今天我学到/做到了："},
+    {id:"worry",label:"今天的烦恼",text:"今天让我有点困扰的是："},
+    {id:"tomorrow",label:"明天想做",text:"明天我想做："},
+    {id:"three",label:"三行日记",text:"此刻的心情：\n今天发生的事：\n明天的一小步："}
+  ];
+  function diaryTagList(rec){ return rec&&Array.isArray(rec.tags)?rec.tags:[]; }
+  function renderDiaryV3(rec,day){
+    if(!$("diaryMonthGrid")) return;
+    var y=diaryMonthV3.getFullYear(),m=diaryMonthV3.getMonth(),first=new Date(y,m,1),days=new Date(y,m+1,0).getDate(),lead=(first.getDay()+6)%7;
+    $("diaryMonthLabel").textContent=y+"年"+(m+1)+"月";
+    var html=""; ["一","二","三","四","五","六","日"].forEach(function(x){html+='<span class="wd">'+x+'</span>';});
+    for(var i=0;i<lead;i++) html+='<span></span>';
+    for(var d=1;d<=days;d++){ var k=y+"-"+pad(m+1)+"-"+pad(d),r=diaryOf(k),has=!!(r&&(String(r.t||"").trim()||(r.images&&r.images.length)||(r.tags&&r.tags.length))); html+='<button type="button" data-diary-day="'+k+'" class="'+(k===day?"sel":"")+(k===dayKey(Date.now())?" today":"")+(has?" has":"")+'">'+d+'</button>'; }
+    $("diaryMonthGrid").innerHTML=html;
+    $("diaryPrompts").innerHTML=DIARY_PROMPTS.map(function(p){return '<button type="button" data-diary-prompt="'+p.id+'">'+esc(p.label)+'</button>';}).join("");
+    $("diaryTags").innerHTML=diaryTagList(rec).map(function(t){return '<span class="tg">'+esc(t)+'<button type="button" data-diary-tag="'+esc(t)+'" aria-label="删除标签">×</button></span>';}).join("");
+    if(diarySearchMode) renderDiarySearchV3();
+  }
+  function addDiaryTagV3(value){
+    var tag=String(value||"").trim().replace(/[#\s]/g,"").slice(0,12); if(!tag) return;
+    var rec=ensureDiaryRec(diaryDay||dayKey(Date.now())),tags=diaryTagList(rec);
+    if(tags.length>=6){ toast("最多 6 个标签"); return; }
+    if(!tags.some(function(x){return x.toLowerCase()===tag.toLowerCase();})) tags.push(tag);
+    rec.tags=tags; rec.updatedAt=Date.now(); save(); renderDiary();
+  }
+  function renderDiarySearchV3(){
+    var box=$("diarySearchResults"),q=String($("diarySearchInput").value||"").trim().toLowerCase();
+    if(!q){box.innerHTML="";box.classList.remove("show");return;}
+    var rows=[]; Object.keys(state.diary||{}).forEach(function(k){var r=state.diary[k]||{},hay=(String(r.t||"")+" "+(r.tags||[]).join(" ")).toLowerCase();if(hay.indexOf(q)>=0)rows.push({k:k,r:r});});
+    rows.sort(function(a,b){return a.k<b.k?1:-1;});
+    box.innerHTML=rows.slice(0,30).map(function(x){var pre=String(x.r.t||"").replace(/\s+/g," ").slice(0,48)||("标签："+(x.r.tags||[]).join("、"));return '<button type="button" data-diary-result="'+esc(x.k)+'"><b>'+esc(x.k)+'</b><br>'+esc(pre)+'</button>';}).join("")||'<div class="bill-empty">没有找到日记</div>';
+    box.classList.add("show");
+  }
+  function renderHabitsV3(){
+    if(!$("habitPageList")) return;
+    var today=dayKey(Date.now()),done=0,total=(state.habits||[]).length,weekDone=0,weekTotal=0;
+    (state.habits||[]).forEach(function(hb){if(habitDone(hb.id,today))done++;weekDone+=habitWeekCount(hb.id,new Date());weekTotal+=(hb.goalType==="weekly"?Math.min(7,num(hb.weeklyTarget,3)):7);});
+    $("habitPageDone").textContent=done+"/"+total; $("habitPageStreak").textContent=checkinStreak()+"天";
+    $("habitPageWeek").textContent=(weekTotal?Math.min(100,Math.round(weekDone/weekTotal*100)):0)+"%";
+    $("habitHeadSummary").textContent="今天 "+done+"/"+total+" · 连续 "+checkinStreak()+" 天";
+    var y=new Date().getFullYear(),m=new Date().getMonth(),days=new Date(y,m+1,0).getDate(),lead=(new Date(y,m,1).getDay()+6)%7;
+    $("habitPageList").innerHTML=(state.habits||[]).map(function(hb){
+      var cells=""; for(var i=0;i<lead;i++)cells+='<span></span>';
+      for(var d=1;d<=days;d++){var k=y+"-"+pad(m+1)+"-"+pad(d),on=habitDone(hb.id,k);cells+='<button type="button" data-habit-day="'+esc(k)+'" data-habit-id="'+esc(hb.id)+'" class="'+(on?"on":"")+(k===today?" today":"")+'">'+d+'</button>';}
+      var goal=hb.goalType==="weekly"?("每周 "+Math.min(7,num(hb.weeklyTarget,3))+" 次"):"每天",key=habitKey(hb.id,today),note=(state.habitNotes||{})[key]||"";
+      return '<div class="habit-card"><div class="habit-card-head"><span class="em">'+esc(hb.emoji||"✨")+'</span><b>'+esc(hb.name)+'</b><span class="goal">'+esc(goal)+' · 连续 '+habitStreak(hb.id)+(hb.goalType==="weekly"?" 周":" 天")+'</span><button class="habit-toggle'+(habitDone(hb.id,today)?" on":"")+'" type="button" data-habit-toggle="'+esc(hb.id)+'">'+(habitDone(hb.id,today)?"已完成":"打卡")+'</button></div><div class="habit-heat">'+cells+'</div><div class="habit-note-bar"><span>'+esc(note||"还没有备注")+'</span><button type="button" data-habit-note="'+esc(hb.id)+'">'+(note?"编辑备注":"添加备注")+'</button></div></div>';
+    }).join("");
+  }
+  function openHabitNote(hid,day){hid=hid||"";day=day||dayKey(Date.now());var hb=habitById(hid);if(!hb)return;habitNoteKey=habitKey(hid,day);$("habitDetailTitle").textContent=hb.name+" · "+day+" 备注";$("habitNoteText").value=(state.habitNotes||{})[habitNoteKey]||"";$("habitDetail").classList.add("show");$("habitDetail").setAttribute("aria-hidden","false");setTimeout(function(){$("habitNoteText").focus();},80);}
+  function closeHabitNote(){$("habitDetail").classList.remove("show");$("habitDetail").setAttribute("aria-hidden","true");habitNoteKey="";}
+  function saveHabitNote(){if(!habitNoteKey)return;var v=String($("habitNoteText").value||"").trim().slice(0,200);if(!state.habitNotes)state.habitNotes={};if(v){state.habitNotes[habitNoteKey]=v;if(!state.habitLog[habitNoteKey]){state.habitLog[habitNoteKey]=Date.now();syncDayCheckin(habitNoteKey.split("|")[1]);}}else delete state.habitNotes[habitNoteKey];save();closeHabitNote();updateCheckinUI();render();toast("备注已保存");}
+  function switchTab(tab){
+    if(["time","bills","diary","habits"].indexOf(tab)<0)tab="time";
+    activeTab=tab;document.body.setAttribute("data-tab",tab);
+    Array.prototype.forEach.call(document.querySelectorAll("#tabbar [data-tab]"),function(b){b.classList.toggle("on",b.getAttribute("data-tab")===tab);});
+    $("billsOverlay").classList.toggle("show",tab==="bills");$("billsOverlay").setAttribute("aria-hidden",String(tab!=="bills"));
+    $("diaryOverlay").classList.toggle("show",tab==="diary");$("diaryOverlay").setAttribute("aria-hidden",String(tab!=="diary"));
+    $("habitsOverlay").classList.toggle("show",tab==="habits");$("habitsOverlay").setAttribute("aria-hidden",String(tab!=="habits"));
+    if(tab==="bills")renderBills(); if(tab==="diary")renderDiary(); if(tab==="habits")renderHabitsV3();
+    try{window.scrollTo(0,0);}catch(err){}
+  }
+  function renderV3Views(){renderBills();renderHabitsV3();if($("diaryOverlay")&&$("diaryOverlay").classList.contains("show"))renderDiary();}
+  function initV3(){
+    document.body.setAttribute("data-tab","time");
+    $("tabbar").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-tab]"):null;if(b)switchTab(b.getAttribute("data-tab"));});
+    $("billAddBtn").addEventListener("click",function(){openBillSheet();}); if($("billCatBtn"))$("billCatBtn").addEventListener("click",manageBillCategories);
+    $("billPrevMonth").addEventListener("click",function(){billMonth.setMonth(billMonth.getMonth()-1);renderBills();});$("billNextMonth").addEventListener("click",function(){billMonth.setMonth(billMonth.getMonth()+1);renderBills();});
+    $("billList").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-bill]"):null;if(b)openBillSheet(b.getAttribute("data-bill"));});
+    $("billCats").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-billcat]"):null;if(b){billCatId=b.getAttribute("data-billcat");renderBillCats();}});
+    $("billSave").addEventListener("click",saveBill);$("billCancel").addEventListener("click",closeBillSheet);$("billDelete").addEventListener("click",deleteBill);$("billAmount").addEventListener("keydown",function(e){if(e.key==="Enter")saveBill();});
+    $("diaryMonthPrev").addEventListener("click",function(){diaryMonthV3.setMonth(diaryMonthV3.getMonth()-1);renderDiary();});$("diaryMonthNext").addEventListener("click",function(){diaryMonthV3.setMonth(diaryMonthV3.getMonth()+1);renderDiary();});
+    $("diaryMonthGrid").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-diary-day]"):null;if(b){commitDiary();diaryDay=b.getAttribute("data-diary-day");diaryMonthV3=new Date(diaryDay+"T00:00:00");renderDiary();}});
+    $("diarySearchBtn").addEventListener("click",function(){diarySearchMode=!diarySearchMode;$("diarySearchBar").classList.toggle("show",diarySearchMode);if(diarySearchMode)setTimeout(function(){$("diarySearchInput").focus();},60);else renderDiary();});
+    $("diarySearchInput").addEventListener("input",renderDiarySearchV3);$("diarySearchResults").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-diary-result]"):null;if(b){commitDiary();diaryDay=b.getAttribute("data-diary-result");diaryMonthV3=new Date(diaryDay+"T00:00:00");diarySearchMode=false;$("diarySearchBar").classList.remove("show");renderDiary();}});
+    $("diaryPrompts").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-diary-prompt]"):null;if(!b)return;var p=DIARY_PROMPTS.filter(function(x){return x.id===b.getAttribute("data-diary-prompt");})[0];if(!p)return;var ta=$("diaryText"),cur=String(ta.value||"");if(cur.trim()&&!confirm("在现有内容后追加这个提示？"))return;ta.value=cur+(cur.trim()?"\n\n":"")+p.text;var rec=ensureDiaryRec(diaryDay);rec.promptId=p.id;ta.dispatchEvent(new Event("input",{bubbles:true}));ta.focus();});
+    $("diaryTagInput").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===","){e.preventDefault();addDiaryTagV3(this.value);this.value="";}});
+    $("diaryTags").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-diary-tag]"):null;if(!b)return;var rec=ensureDiaryRec(diaryDay);rec.tags=(rec.tags||[]).filter(function(x){return x!==b.getAttribute("data-diary-tag");});rec.updatedAt=Date.now();save();renderDiary();});
+    $("habitPageAdd").addEventListener("click",addHabit);$("habitPageList").addEventListener("click",function(e){var t=e.target.closest?e.target.closest("[data-habit-toggle]"):null;if(t){toggleHabit(t.getAttribute("data-habit-toggle"));return;}var d=e.target.closest?e.target.closest("[data-habit-day]"):null;if(d){toggleHabit(d.getAttribute("data-habit-id"),d.getAttribute("data-habit-day"),true);return;}var n=e.target.closest?e.target.closest("[data-habit-note]"):null;if(n)openHabitNote(n.getAttribute("data-habit-note"));});
+    $("habitNoteCancel").addEventListener("click",closeHabitNote);$("habitNoteSave").addEventListener("click",saveHabitNote);
+    var action=new URLSearchParams(location.search).get("action");if(action==="expense")switchTab("bills");else if(action==="diary")switchTab("diary");else if(action==="habit")switchTab("habits");
+    renderV3Views();
+  }
   /* 仅当 URL 带 #test 时暴露测试钩子（自动化发布检查用，正常打开不生效） */
   if(location.hash.indexOf("test")>=0){
     window.__tnTest={
@@ -2661,7 +3109,13 @@ $("btnInstall").addEventListener("click",function(){
       syncEncode:jsonToB64,
       syncDecode:b64ToJson,
       mergeIncoming:mergeIncoming,
-      getState:function(){ return state; }
+      getState:function(){ return state; },
+      switchTab:switchTab,
+      renderBills:renderBills,
+      openBillSheet:openBillSheet,
+      saveBill:saveBill,
+      renderDiary:renderDiary,
+      renderHabits:renderHabitsV3
     };
   }
   /* ---------- boot ---------- */
@@ -2676,6 +3130,7 @@ $("btnInstall").addEventListener("click",function(){
   setPaper(state.paper,true);
   autoBackup();
   render();
+  initV3();
   try{
     if(location.hash.indexOf("#sync=")===0){
       var incoming=location.hash.slice(6);
