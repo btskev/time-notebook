@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
 <meta name="theme-color" content="#111C30">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -644,6 +644,86 @@ body[data-tab="time"] .habit-wrap,body[data-tab="time"] .stat-strip{display:none
 .head-actions{display:flex;gap:7px}.page-action.ghost{background:var(--card);color:var(--ink-2);border:1px solid var(--line)}
 .diary-body .day-strip{display:none}
 .diary-ov .ov-head{background:var(--card)}
+/* ================= v4 · 手机紧凑与高级账单主题 ================= */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+.app{width:100%}
+.tab-page,.bill-sheet,.habit-detail{max-width:100vw}
+#billsOverlay,#billSheet{
+  --paper:#F7F4ED;--paper-2:#F0EBE1;--card:#FFFDF8;--card-2:#FBF8F2;--line:#E3DED3;
+  --ink:#171A20;--ink-2:#3D4046;--ink-soft:#77746E;--ink-faint:#A7A198;
+  --brass:#C2A25B;--brass-soft:rgba(194,162,91,.13);--teal:#6F7F75;--teal-soft:rgba(111,127,117,.10);
+  --signal:#B64F45;--signal-soft:rgba(182,79,69,.10);--shadow-1:0 12px 28px -24px rgba(23,26,32,.55)
+}
+@media (prefers-color-scheme:dark){
+  #billsOverlay,#billSheet{
+    --paper:#111315;--paper-2:#181B1E;--card:#1C1F23;--card-2:#171A1D;--line:#30343A;
+    --ink:#F4F0E8;--ink-2:#D0CCC4;--ink-soft:#98938A;--ink-faint:#68645E;
+    --brass:#D6B978;--brass-soft:rgba(214,185,120,.13);--teal:#8EA69A;--teal-soft:rgba(142,166,154,.11);
+    --signal:#E07970;--signal-soft:rgba(224,121,112,.12);--shadow-1:0 12px 28px -22px rgba(0,0,0,.9)
+  }
+}
+#billsOverlay{background:var(--paper);color:var(--ink)}
+#billsOverlay .quick-page-head{background:linear-gradient(180deg,var(--card),var(--card-2))}
+#billsOverlay .page-action:not(.ghost),#billSheet .bill-sheet-actions .save{background:#171A20;color:#FFFDF8;border-color:#171A20}
+.bill-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.bill-summary>div{padding:12px 13px;border-color:var(--line);background:var(--card);box-shadow:var(--shadow-1)}
+.bill-summary .bill-total{grid-column:1/-1;background:linear-gradient(150deg,#1A1D22,#24272C 72%,#2C2B27);color:#F7F3EA;border-color:#2A2D31}
+.bill-summary .bill-total span{color:#C9C3B8}.bill-summary .bill-total b{color:#FFFDF8;font-size:25px}
+.bill-summary .bill-total small{display:block;margin-top:5px;color:#D6B978;font-size:10.5px}
+.bill-mini b{font-size:17px}.bill-mini small{display:block;margin-top:4px;color:var(--ink-soft);font-size:10px}
+.bill-insights{margin:0 0 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;box-shadow:var(--shadow-1)}
+.insight-head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.insight-head b{font-size:12px;color:var(--ink-2)}.insight-head button{margin-left:auto;border:1px solid var(--line);border-radius:99px;background:var(--paper-2);color:var(--ink-soft);padding:5px 10px;font-size:10.5px}
+.bill-cat-rank{padding:4px 12px 9px}.bill-cat-item{padding:8px 0}.bill-cat-top{display:flex;align-items:center;gap:8px;font-size:11.5px}.bill-cat-top b{font-weight:600}.bill-cat-top span{margin-left:auto;font-family:var(--mono);color:var(--ink-2)}
+.bill-cat-bar{height:4px;border-radius:99px;background:var(--paper-2);overflow:hidden;margin-top:6px}.bill-cat-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#C2A25B,#A18447)}
+.bill-trend{height:132px;display:flex;align-items:flex-end;gap:6px;padding:14px 12px 8px}.trend-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}.trend-val{font-family:var(--mono);font-size:8.5px;color:var(--ink-soft);white-space:nowrap}.trend-bar{width:100%;max-width:25px;min-height:3px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#D6B978,#A18447)}.trend-bar.empty{background:var(--paper-2)}.trend-lab{font-size:9.5px;color:var(--ink-soft)}
+.bill-sheet{max-height:88vh;overflow-y:auto;overscroll-behavior:contain}
+.bill-fields input{background:var(--card-2)}
+.bill-cats button{background:var(--paper-2)}
+.bill-row .cat{background:var(--paper-2)}
+@media (max-width:430px){
+  body{font-size:14px}
+  .top{padding:calc(var(--safe-t) + 10px) 14px 9px}
+  .clock{font-size:clamp(30px,10.4vw,40px)}
+  .clock .sec{font-size:16px}.date{margin-top:5px;font-size:11px}
+  .icon-btn{width:32px;height:32px;font-size:15px}
+  .stat-strip{gap:6px;margin-top:9px}.stat-cell{padding:6px 8px;border-radius:10px}.stat-cell b{font-size:13px}.stat-cell span{font-size:9.5px}
+  .bottom{padding:7px 9px calc(var(--safe-b) + 7px)}
+  body[data-tab="time"] .bottom{bottom:calc(var(--safe-b) + 55px)}
+  .composer{gap:6px;padding:6px 6px 6px 9px;border-radius:13px}
+  .stamp{font-size:9.5px;padding-bottom:7px}
+  textarea#input{font-size:15px;max-height:104px;padding:5px 0}
+  .brush{width:34px;height:34px;font-size:14px}.send{width:34px;height:34px;font-size:15px}
+  .dock{gap:6px;margin-top:6px}.dock button{height:36px;border-radius:10px;font-size:11.5px}
+  .tabbar{padding:4px 6px calc(var(--safe-b) + 4px);gap:1px}
+  .tabbar button{height:44px;border-radius:10px}.tabbar button b{font-size:15px}.tabbar button span{font-size:9.5px}
+  .tab-page{padding-bottom:calc(var(--safe-b) + 56px)}
+  .quick-page-head{padding:12px 13px 9px;gap:8px}.quick-page-head h2{font-size:18px}.quick-page-head p{margin-top:3px;font-size:10.5px}
+  .page-action{padding:7px 12px;font-size:11.5px}.head-actions{gap:5px}
+  .page-scroll{padding:10px 10px 104px}
+  .month-nav{margin-bottom:10px;gap:8px}.month-nav button{width:30px;height:30px}.month-nav b{min-width:98px;font-size:12.5px}
+  .bill-summary{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}.bill-summary>div{padding:10px 11px;border-radius:12px}.bill-summary .bill-total b{font-size:22px}.bill-mini b{font-size:15px}
+  .bill-insights{border-radius:12px}.insight-head{padding:8px 10px}.bill-cat-rank{padding:2px 10px 7px}.bill-cat-item{padding:7px 0}
+  .bill-trend{height:112px;padding:10px 9px 6px;gap:4px}.trend-val{font-size:8px}.trend-lab{font-size:9px}
+  .bill-day{margin-bottom:11px}.bill-day-head{padding-bottom:5px}.bill-list{border-radius:12px}
+  .bill-row{grid-template-columns:32px minmax(0,1fr) auto;gap:8px;padding:9px 10px}.bill-row .cat{width:31px;height:31px;border-radius:9px;font-size:15px}.bill-row .main b{font-size:12.5px}.bill-row .main small{font-size:10px}.bill-row .amount{font-size:12.5px}
+  .bill-sheet{padding:13px 13px calc(var(--safe-b) + 13px);border-radius:16px 16px 0 0}.bill-sheet h3{margin-bottom:10px;font-size:14px}
+  .bill-amount{padding-bottom:8px;margin-bottom:9px}.bill-amount span{font-size:21px}.bill-amount input{font-size:28px}
+  .bill-cats{gap:6px;padding-bottom:8px}.bill-cats button{height:31px;padding:0 9px;font-size:11px}
+  .bill-fields{gap:6px;margin-bottom:11px}.bill-fields input{height:38px;font-size:11.5px}
+  .bill-sheet-actions button{height:40px;font-size:12px}
+  main{background-size:19px 19px}.row{grid-template-columns:47px 18px minmax(0,1fr) 30px;padding-top:9px;padding-bottom:9px}.row .t{font-size:10.5px}.rail i{width:7px;height:7px}.body{padding-left:8px}.text{font-size:15.5px;line-height:1.55}.check{width:20px;height:20px}
+  .diary-body{padding:7px 8px calc(var(--safe-b) + 60px)}.diary-tools{gap:6px;margin-bottom:7px}.diary-tools button{height:31px;padding:0 10px;font-size:10.5px}.diary-month-grid{gap:3px;margin-bottom:8px}.diary-month-grid button{border-radius:8px;font-size:10px}.diary-prompt button{padding:6px 9px;font-size:10.5px}.diary-tags input{height:27px}.diary-text{padding:13px 13px 13px 16px;font-size:15.5px;line-height:29px;background-image:repeating-linear-gradient(to bottom,transparent 0 28px,var(--rule) 28px 29px);background-position:0 12px}.diary-foot{padding-top:6px;font-size:10.5px}
+  .habit-summary{gap:6px;margin-bottom:10px}.habit-summary div{padding:9px;border-radius:12px}.habit-summary b{font-size:15px}.habit-card{padding:10px;border-radius:13px}.habit-card-head{gap:7px}.habit-card-head .goal{font-size:9.5px}.habit-toggle{min-width:57px;height:31px;font-size:10.5px}.habit-heat{gap:3px;margin-top:8px}.habit-heat button{border-radius:6px;font-size:8.5px}.habit-note-bar{margin-top:7px;font-size:10px}
+}
+@media (max-width:360px){
+  .clock{font-size:32px}.clock .sec{font-size:14px}
+  .quick-page-head h2{font-size:17px}.head-actions{flex-direction:column;gap:4px}.head-actions .page-action{width:100%}
+  .bill-summary{grid-template-columns:1fr 1fr}.bill-summary .bill-total{grid-column:1/-1}
+  .bill-fields{grid-template-columns:1fr}.bill-sheet{max-height:90vh}
+  .diary-tools{flex-wrap:wrap}.diary-tools .spacer{display:none}.diary-tools b{flex:1;text-align:center}
+  .habit-card-head{flex-wrap:wrap}.habit-card-head .goal{order:3;width:100%;margin-left:32px}
+}
 </style>
 </head>
 <body>
@@ -817,7 +897,16 @@ body[data-tab="time"] .habit-wrap,body[data-tab="time"] .stat-strip{display:none
   <div class="quick-page-head"><div><h2>每日账单</h2><p id="billHeadSummary">本月 ¥0.00 · 0 笔</p></div><div class="head-actions"><button class="page-action ghost" id="billCatBtn" type="button">分类</button><button class="page-action" id="billAddBtn" type="button">＋ 记一笔</button></div></div>
   <div class="page-scroll">
     <div class="month-nav"><button id="billPrevMonth" type="button" aria-label="上个月">‹</button><b id="billMonthLabel"></b><button id="billNextMonth" type="button" aria-label="下个月">›</button></div>
-    <div class="bill-summary"><div><span>本月支出</span><b id="billMonthTotal">¥0.00</b></div><div class="small"><span>记录</span><b id="billMonthCount">0 笔</b></div></div>
+    <div class="bill-summary">
+      <div class="bill-total"><span>本月支出</span><b id="billMonthTotal">¥0.00</b><small id="billMonthCompare">还没有本月记录</small></div>
+      <div class="bill-mini"><span>日均支出</span><b id="billDailyAvg">¥0.00</b></div>
+      <div class="bill-mini"><span>笔均金额</span><b id="billAvgTx">¥0.00</b><small id="billMonthCount">0 笔</small></div>
+    </div>
+    <div class="bill-insights">
+      <div class="insight-head"><b>账单洞察</b><button id="billInsightToggle" type="button">近 7 天</button></div>
+      <div id="billCategoryInsights"></div>
+      <div id="billTrendInsights" hidden></div>
+    </div>
     <div id="billList"></div>
   </div>
 </div>
@@ -2914,7 +3003,7 @@ $("btnInstall").addEventListener("click",function(){
   })();
 
   /* ---------- v3 · 共用导航与每日账单 ---------- */
-  var activeTab="time", billMonth=new Date(), billEditId="", billCatId="c_other";
+  var activeTab="time", billMonth=new Date(), billEditId="", billCatId="c_other", billInsightMode="category";
   function fmtMoney(cents){ return "¥"+((Math.max(0,Math.round(num(cents,0)))/100).toFixed(2)); }
   function billById(id){ var L=state.bills||[]; for(var i=0;i<L.length;i++){ if(L[i].id===id) return L[i]; } return null; }
   function billCatById(id){ var L=state.billCategories||[]; for(var i=0;i<L.length;i++){ if(L[i].id===id) return L[i]; } return L[0]||{id:"c_other",name:"其他",emoji:"•"}; }
@@ -2935,11 +3024,21 @@ $("btnInstall").addEventListener("click",function(){
     if(!$("billList")) return;
     var mk=billMonthKey(billMonth), rows=(state.bills||[]).filter(function(b){ return b.date.slice(0,7)===mk; });
     rows.sort(function(a,b){ return a.date===b.date ? (b.ts||0)-(a.ts||0) : (a.date<b.date?1:-1); });
-    var total=rows.reduce(function(s,b){return s+b.amountCents;},0);
-    $("billMonthLabel").textContent=billMonth.getFullYear()+"年"+(billMonth.getMonth()+1)+"月";
+    var total=rows.reduce(function(s,b){return s+b.amountCents;},0), y=billMonth.getFullYear(), m=billMonth.getMonth();
+    var now=new Date(), isCurrent=(mk===billMonthKey(now));
+    var daysInMonth=new Date(y,m+1,0).getDate(), dayLimit=isCurrent?now.getDate():daysInMonth;
+    var daily=total/Math.max(1,dayLimit), avgTx=rows.length?total/rows.length:0;
+    var prevMonth=new Date(y,m-1,1), prevKey=billMonthKey(prevMonth), prevDays=Math.min(dayLimit,new Date(prevMonth.getFullYear(),prevMonth.getMonth()+1,0).getDate());
+    var prevTotal=(state.bills||[]).filter(function(b){return b.date.slice(0,7)===prevKey && parseInt(b.date.slice(8,10),10)<=prevDays;}).reduce(function(s,b){return s+b.amountCents;},0);
+    var delta=total-prevTotal;
+    $("billMonthLabel").textContent=y+"年"+(m+1)+"月";
     $("billMonthTotal").textContent=fmtMoney(total);
+    $("billDailyAvg").textContent=fmtMoney(daily);
+    $("billAvgTx").textContent=fmtMoney(avgTx);
     $("billMonthCount").textContent=rows.length+" 笔";
+    $("billMonthCompare").textContent=rows.length?("较上月同期 "+(delta>0?"+":delta<0?"-":"")+fmtMoney(Math.abs(delta))):"还没有本月记录";
     $("billHeadSummary").textContent="本月 "+fmtMoney(total)+" · "+rows.length+" 笔";
+    renderBillInsights(rows,total);
     if(!rows.length){ $("billList").innerHTML='<div class="bill-empty">这个月还没有支出<br>点右上角「＋ 记一笔」开始</div>'; return; }
     var html="",cur="",open=false;
     rows.forEach(function(b){
@@ -2954,6 +3053,20 @@ $("btnInstall").addEventListener("click",function(){
     });
     if(open) html+='</div></div>';
     $("billList").innerHTML=html;
+  }
+  function renderBillInsights(rows,total){
+    if(!$("billCategoryInsights")) return;
+    var map={},sumAll=0;
+    rows.forEach(function(b){var c=billCatById(b.categoryId);if(!map[c.id])map[c.id]={id:c.id,name:c.name,emoji:c.emoji,amount:0};map[c.id].amount+=b.amountCents;sumAll+=b.amountCents;});
+    var cats=Object.keys(map).map(function(k){return map[k];}).sort(function(a,b){return b.amount-a.amount;});
+    var top=cats.slice(0,5), rest=cats.slice(5).reduce(function(s,c){return s+c.amount;},0);if(rest){top.push({id:"__other__",name:"其他",emoji:"•••",amount:rest});}
+    $("billCategoryInsights").innerHTML=top.length?'<div class="bill-cat-rank">'+top.map(function(c){var pct=sumAll?Math.round(c.amount/sumAll*100):0;return '<div class="bill-cat-item"><div class="bill-cat-top"><span>'+esc(c.emoji||"•")+'</span><b>'+esc(c.name)+'</b><span>'+fmtMoney(c.amount)+' · '+pct+'%</span></div><div class="bill-cat-bar"><i style="width:'+pct+'%"></i></div></div>';}).join("")+'</div>':'<div class="bill-empty">本月暂无分类数据</div>';
+    var days=[],now=new Date(),max=1;
+    for(var i=6;i>=0;i--){var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),k=dayKey(d.getTime());var amt=(state.bills||[]).filter(function(b){return b.date===k;}).reduce(function(s,b){return s+b.amountCents;},0);days.push({d:d,amt:amt});if(amt>max)max=amt;}
+    $("billTrendInsights").innerHTML='<div class="bill-trend">'+days.map(function(x){var h=x.amt?Math.max(6,Math.round(x.amt/max*82)):3;return '<div class="trend-col"><span class="trend-val">'+(x.amt?fmtMoney(x.amt).replace("¥",""):"")+'</span><div class="trend-bar'+(x.amt?"":" empty")+'" style="height:'+h+'px"></div><span class="trend-lab">'+WEEK[x.d.getDay()].slice(1)+'</span></div>';}).join("")+'</div>';
+    $("billCategoryInsights").hidden=billInsightMode!=="category";
+    $("billTrendInsights").hidden=billInsightMode==="category";
+    $("billInsightToggle").textContent=billInsightMode==="category"?"近 7 天":"分类排行";
   }
   function renderBillCats(){
     var box=$("billCats"); if(!box) return;
@@ -3086,6 +3199,7 @@ $("btnInstall").addEventListener("click",function(){
     $("tabbar").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-tab]"):null;if(b)switchTab(b.getAttribute("data-tab"));});
     $("billAddBtn").addEventListener("click",function(){openBillSheet();}); if($("billCatBtn"))$("billCatBtn").addEventListener("click",manageBillCategories);
     $("billPrevMonth").addEventListener("click",function(){billMonth.setMonth(billMonth.getMonth()-1);renderBills();});$("billNextMonth").addEventListener("click",function(){billMonth.setMonth(billMonth.getMonth()+1);renderBills();});
+    $("billInsightToggle").addEventListener("click",function(){billInsightMode=(billInsightMode==="category")?"trend":"category";renderBills();});
     $("billList").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-bill]"):null;if(b)openBillSheet(b.getAttribute("data-bill"));});
     $("billCats").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-billcat]"):null;if(b){billCatId=b.getAttribute("data-billcat");renderBillCats();}});
     $("billSave").addEventListener("click",saveBill);$("billCancel").addEventListener("click",closeBillSheet);$("billDelete").addEventListener("click",deleteBill);$("billAmount").addEventListener("keydown",function(e){if(e.key==="Enter")saveBill();});
